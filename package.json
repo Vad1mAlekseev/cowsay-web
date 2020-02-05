@@ -4,13 +4,17 @@
   "description": "",
   "main": "main.js",
   "scripts": {
+    "start": "node main.js",
     "dev": "nodemon main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Vad1m_Alekseev",
   "license": "ISC",
   "dependencies": {
-    "lodash": "^4.17.15",
+    "koa": "^2.11.0",
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {
     "nodemon": "^2.0.2"
   }
 }
