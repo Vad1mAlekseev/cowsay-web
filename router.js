@@ -46,14 +46,13 @@ function defineRoutes() {
   router.get('/:cow', async ctx => {
     const cows = await getCows();
     const requestedCow = ctx.params.cow;
+    const cowMessage = ctx.params.text
+      ? `"${ctx.params.text}"`
+      : `"I'm the ${requestedCow}!"`;
     const nextCowIdx = _.indexOf(cows, requestedCow) + 1;
     const prevCowIdx = _.indexOf(cows, requestedCow) - 1;
 
-    const cow = await cowsay(
-      'f',
-      ctx.params.cow,
-      requestedCow ? `"${requestedCow}"` : `"I'm a ${requestedCow}!"`
-    );
+    const cow = await cowsay('f', requestedCow, cowMessage);
     ctx.body = _.template(templates.cow)({
       cow,
       nextCow: cows[nextCowIdx],
