@@ -5,6 +5,11 @@
     <title>Cowsay web!</title>
   </head>
   <body>
+    <div class="navigation">
+      <a href="/<%- prevCow %>">&lt;--previous cow</a>
+      <a href="/">main page</a>
+      <a href="/<%- nextCow %>">next cow--&gt;</a>
+    </div>
     <div class="cow">
       <pre><%- cow %></pre>
     </div>
@@ -19,6 +24,10 @@
       }
       a {
         color: white;
+      }
+      .navigation {
+        display: flex;
+        justify-content: space-between;
       }
     </style>
   </body>
