@@ -46,9 +46,9 @@ function defineRoutes() {
   router.get('/:cow', async ctx => {
     const cows = await getCows();
     const requestedCow = ctx.params.cow;
-    const cowMessage = ctx.params.text
-      ? `"${ctx.params.text}"`
-      : `"I'm the ${requestedCow}!"`;
+    const cowMessage = ctx.query.text
+      ? `"${ctx.query.text}"`
+      : `"My name is: ${requestedCow}!"`;
     const nextCowIdx = _.indexOf(cows, requestedCow) + 1;
     const prevCowIdx = _.indexOf(cows, requestedCow) - 1;
 
