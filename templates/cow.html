@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Cowsay web!</title>
+  </head>
+  <body>
+    <div class="navigation">
+      <a href="/<%- prevCow %>">&lt;--previous cow</a>
+      <a href="/">main page</a>
+      <a href="/<%- nextCow %>">next cow--&gt;</a>
+    </div>
+    <div class="cow">
+      <pre><%- cow %></pre>
+    </div>
+    <style>
+      body {
+        color: white;
+        background-color: black;
+      }
+
+      .cow {
+        display: flex;
+        justify-content: center;
+      }
+
+      a {
+        color: white;
+      }
+
+      .navigation {
+        display: flex;
+        justify-content: space-between;
+      }
+    </style>
+  </body>
+</html>

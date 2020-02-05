@@ -1,13 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <div id="actorList">
-        <% _.forEach(buttons, function(button) { %><ul><li><a href="/<%- button %>"><%- button %></a></li></ul><% }); %>
-    </div>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Cowsay web!</title>
+    <style>
+      body {
+        color: white;
+        background-color: black;
+      }
 
-</body>
+      a {
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <h2>Choose the cow:</h2>
+      <ul>
+        <% _.forEach(cows, function(cow) { %>
+          <li><a href="/<%- cow %>"><%- cow %></a></li>
+        <% }); %>
+      </ul>
+    </div>
+  </body>
 </html>
