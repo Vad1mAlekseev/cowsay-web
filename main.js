@@ -1,9 +1,10 @@
-global._ = require('lodash');
 const { exec } = require('child_process');
 const http = require('http');
 fs = require('fs');
 const { promisify } = require('util');
 
+global._ = require('lodash');
+const { APP_PORT, APP_HOST } = require('./app-config')
 const readFile = promisify(fs.readFile);
 
 const server = http.createServer(async (req, res) => {
@@ -42,6 +43,6 @@ const server = http.createServer(async (req, res) => {
     }));
 });
 
-server.listen(4040, '0.0.0.0', () => {
-    console.log('123');
+server.listen(APP_PORT, APP_HOST, () => {
+    console.log(`Server listen ${APP_HOST}:${APP_PORT}`);
 });
