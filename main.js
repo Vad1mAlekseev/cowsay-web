@@ -1,53 +1,56 @@
-const { exec } = require('child_process');
+const childProcess = require('child_process');
 const Koa = require('koa');
-const app = new Koa();
 fs = require('fs');
 const { promisify } = require('util');
+const Router = require('koa-router');
 
 global._ = require('lodash');
 const { APP_PORT, APP_HOST } = require('./app-config');
 const readFile = promisify(fs.readFile);
+const exec = promisify(childProcess.exec);
+const app = new Koa();
+const router = new Router();
 
-app.use(async ctx => {
-  const URL = ctx.request.url;
+async function start() {
+  const sowsay = async (flags, ...args) => {
+    const { stdout, stderr } = await exec(`cowsay -${flags} ${args.join(' ')}`);
+    return stderr || stdout;
+  };
+  const templates = {
+    index: await readFile('templates/index.html'),
+    cow: await readFile('templates/cow.html'),
+  };
 
-  if (!URL.slice(1)) {
-    let template = await readFile('templates/index.html');
-    ctx.body = await new Promise((resolve, reject) => {
-      exec(`cowsay -l`, (error, stdout, stderr) => {
-        if (stderr || error) {
-          ctx.body = `exec error: ${error}`;
-          resolve(stderr);
-          re2turn;
-        }
-        const buttons = _(stdout)
-          .split('\n')
-          .splice(1)
-          .words()
-          .value();
-        resolve(_.template(template)({ buttons }));
-      });
-    });
-    return;
-  }
+  router.get('/', async ctx => {
+    try {
+      const cowsayResult = await sowsay('l');
 
-  ctx.body = await new Promise((resolve, reject) => {
-    exec(
-      `cowsay -f ${URL.split('')
+      const cows = _(cowsayResult)
+        .split('\n')
         .splice(1)
-        .join('')} hello`,
-      (error, stdout, stderr) => {
-        if (stderr || error) {
-          ctx.body = error.toString();
-          resolve(stderr);
-          return;
-        }
-        resolve(stdout);
-      }
-    );
-  });
-});
+        .join(' ')
+        .trim()
+        .split(' ');
 
-app.listen(APP_PORT, APP_HOST, () => {
-  console.log(`Server listen ${APP_HOST}:${APP_PORT}`);
-});
+      ctx.body = _.template(templates.index)({ cows });
+    } catch (err) {
+      ctx.throw(400, err);
+    }
+  });
+
+  router.get('/:file', async ctx => {
+    const cow = await sowsay(
+      'f',
+      ctx.params.file,
+      ctx.query.text || 'Hello World!'
+    );
+    ctx.body = _.template(templates.cow)({ cow });
+  });
+
+  app.use(router.routes());
+  app.listen(APP_PORT, APP_HOST, () => {
+    console.log(`Server listen ${APP_HOST}:${APP_PORT}`);
+  });
+}
+
+start();
