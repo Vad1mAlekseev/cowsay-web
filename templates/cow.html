@@ -5,13 +5,17 @@
     <title>Cowsay web!</title>
   </head>
   <body>
-    <div id="actorList">
+    <div class="cow">
       <pre><%- cow %></pre>
     </div>
     <style>
       body {
         color: white;
         background-color: black;
+      }
+      .cow {
+        display: flex;
+        justify-content: center;
       }
       a {
         color: white;

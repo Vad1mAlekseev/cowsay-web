@@ -3,23 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <title>Cowsay web!</title>
-  </head>
-  <body>
-    <div id="actorList">
-      <% _.forEach(cows, function(cow) { %>
-      <ul>
-        <li><a href="/<%- cow %>"><%- cow %></a></li>
-      </ul>
-      <% }); %>
-    </div>
     <style>
       body {
         color: white;
         background-color: black;
       }
+
       a {
         color: white;
       }
     </style>
+  </head>
+  <body>
+    <div id="actorList">
+      <ul>
+        <% _.forEach(cows, function(cow) { %>
+          <li><a href="/<%- cow %>"><%- cow %></a></li>
+        <% }); %>
+      </ul>
+    </div>
   </body>
 </html>
