@@ -7,11 +7,12 @@ const exec = promisify(childProcess.exec);
 const router = new Router();
 
 const templates = {
-  index: fs.readFileSync('templates/index.html'),
-  cow: fs.readFileSync('templates/cow.html'),
+  index: fs.readFileSync('./templates/index.lodash.html'),
+  cow: fs.readFileSync('./templates/cow.lodash.html'),
 };
 const staticFiles = {
-  ico: fs.readFileSync('static/favicon.ico'),
+  ico: fs.readFileSync('./static/favicon.ico'),
+  stylesheet: fs.readFileSync('./static/style.css'),
 };
 
 async function cowsay(flags, text) {
@@ -45,7 +46,10 @@ function defineRoutes() {
 
   router.get('/', async (ctx) => {
     try {
-      ctx.body = _.template(templates.index)({ cows: await getCows() });
+      ctx.body = _.template(templates.index)({
+        cows: await getCows(),
+        stylesheet: staticFiles.stylesheet,
+      });
     } catch (err) {
       ctx.throw(400, err);
     }
@@ -69,6 +73,7 @@ function defineRoutes() {
 
     ctx.body = _.template(templates.cow)({
       cow,
+      stylesheet: staticFiles.stylesheet,
       nextCow: cows[nextCowIdx],
       prevCow: cows[prevCowIdx],
     });

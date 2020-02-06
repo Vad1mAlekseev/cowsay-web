@@ -9,7 +9,7 @@
   "main": "main.js",
   "scripts": {
     "start": "node main.js",
-    "dev": "nodemon -e html,js,json main.js",
+    "dev": "nodemon -e html,js,json,css main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Vad1m_Alekseev",

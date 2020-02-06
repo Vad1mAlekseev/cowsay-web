@@ -1,0 +1,54 @@
+body {
+  color: white;
+  background-color: black;
+  font-size: 1.5rem;
+  font-family: monospace;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.flex.wrap a {
+  margin: 10px;
+}
+
+a {
+  color: white;
+}
+
+a:visited {
+  color: #84ff9d;
+}
+
+.author {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin-right: 15px;
+  margin-bottom: 5px;
+}
+
+#confirmTextButton,
+#simpleModeButton {
+  color: white;
+  background-color: black;
+  border: 2px solid white;
+  font-size: 1.5rem;
+}
+
+#cowText {
+  background-color: black;
+  color: white;
+  font-size: 1.5rem;
+  border: 2px solid white;
+  max-width: 15rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.justify-around {
+  justify-content: space-around;
+}
