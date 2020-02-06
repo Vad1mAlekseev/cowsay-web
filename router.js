@@ -10,17 +10,25 @@ const templates = {
   index: fs.readFileSync('templates/index.html'),
   cow: fs.readFileSync('templates/cow.html'),
 };
-const static = {
+const staticFiles = {
   ico: fs.readFileSync('static/favicon.ico'),
 };
 
-async function cowsay(flags, ...args) {
-  const { stdout, stderr } = await exec(`cowsay -${flags} ${args.join(' ')}`);
+async function cowsay(flags, text) {
+  let query = `cowsay ${_(flags).map((flag) => `-${flag}`).join(' ')}`;
+  if (text) {
+    if (text === 'random') {
+      query = `fortune | ${query}`;
+    } else {
+      query = `echo ${_(text).words().join(' ')} | ${query}`;
+    }
+  }
+  const { stdout, stderr } = await exec(query);
   return stderr || stdout;
 }
 
 async function getCows() {
-  const cowsayResult = await cowsay('l');
+  const cowsayResult = await cowsay(['l']);
   return _(cowsayResult)
     .split('\n')
     .splice(1)
@@ -30,12 +38,12 @@ async function getCows() {
 }
 
 function defineRoutes() {
-  router.get('/favicon.ico', async ctx => {
+  router.get('/favicon.ico', async (ctx) => {
     ctx.type = 'image/x-icon';
-    ctx.body = static.ico;
+    ctx.body = staticFiles.ico;
   });
 
-  router.get('/', async ctx => {
+  router.get('/', async (ctx) => {
     try {
       ctx.body = _.template(templates.index)({ cows: await getCows() });
     } catch (err) {
@@ -43,22 +51,25 @@ function defineRoutes() {
     }
   });
 
-  router.get('/:cow', async ctx => {
+  router.get('/:cow', async (ctx) => {
     const cows = await getCows();
     const requestedCow = ctx.params.cow;
-    const cowMessage = ctx.params.text
-      ? `"${ctx.params.text}"`
-      : `"I'm the ${requestedCow}!"`;
+
+    if (!_.includes(cows, requestedCow)) {
+      return;
+    }
+
     const nextCowIdx = _.indexOf(cows, requestedCow) + 1;
     const prevCowIdx = _.indexOf(cows, requestedCow) - 1;
+    const cow = await cowsay([`f ${requestedCow}`], ctx.query.text || 'random');
 
-    const cow = await cowsay('f', requestedCow, cowMessage);
     ctx.body = _.template(templates.cow)({
       cow,
       nextCow: cows[nextCowIdx],
       prevCow: cows[prevCowIdx],
     });
   });
+
 
   return router;
 }

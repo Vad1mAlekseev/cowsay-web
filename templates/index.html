@@ -7,21 +7,45 @@
       body {
         color: white;
         background-color: black;
+        font-size: 1.5rem;
+        font-family: monospace;
+      }
+
+      .cows {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .cow {
+        margin: 10px;
       }
 
       a {
         color: white;
+      }
+
+      .author {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        margin-right: 15px;
+        margin-bottom: 5px;
       }
     </style>
   </head>
   <body>
     <div>
       <h2>Choose the cow:</h2>
-      <ul>
+      <div class="cows">
         <% _.forEach(cows, function(cow) { %>
-          <li><a href="/<%- cow %>"><%- cow %></a></li>
+          <a class="cow" href="/<%- cow %>"><%- cow %></a>
         <% }); %>
-      </ul>
+      </div>
+      <div class="author">
+        <a href="https://github.com/vad1malekseev/cowsay-web">
+          Guthub
+        </a>
+      </div>
     </div>
   </body>
 </html>
