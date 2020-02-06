@@ -1,7 +1,11 @@
 {
   "name": "echo-cowsay",
   "version": "1.0.0",
-  "description": "",
+  "description": "Cowsay-web based on the cowsay-cli program",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/Vad1mAlekseev/cowsay-web"
+  },
   "main": "main.js",
   "scripts": {
     "start": "node main.js",
