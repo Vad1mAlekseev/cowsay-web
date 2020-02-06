@@ -59,9 +59,13 @@ function defineRoutes() {
       return;
     }
 
+    const cow = await cowsay([`f ${requestedCow}`], ctx.query.text || 'random');
+    if (ctx.query.mode === 'simple') {
+      ctx.body = cow;
+      return;
+    }
     const nextCowIdx = _.indexOf(cows, requestedCow) + 1;
     const prevCowIdx = _.indexOf(cows, requestedCow) - 1;
-    const cow = await cowsay([`f ${requestedCow}`], ctx.query.text || 'random');
 
     ctx.body = _.template(templates.cow)({
       cow,
@@ -74,4 +78,4 @@ function defineRoutes() {
   return router;
 }
 
-module.exports = defineRoutes();
+module.exports = defineRoutes;
