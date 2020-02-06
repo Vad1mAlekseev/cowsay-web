@@ -7,7 +7,7 @@ const router = require('./router');
 const app = new Koa();
 
 async function start() {
-  app.use(router.routes());
+  app.use(router().routes());
   app.listen(APP_PORT, APP_HOST, () => {
     console.log(`Server listen on ${APP_HOST}:${APP_PORT}`);
   });
