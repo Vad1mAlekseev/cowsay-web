@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Cowsay web!</title>
+  <style>
+    <%- stylesheet %>
+  </style>
+</head>
+<body>
+<div>
+  <h2>Choose the cow:</h2>
+  <div class="flex wrap">
+    <% _.forEach(cows, function(cow) { %>
+    <a href="/<%- cow %>"><%- cow %></a>
+    <% }); %>
+  </div>
+  <div class="author">
+    <a href="https://github.com/vad1malekseev/cowsay-web">
+      Github
+    </a>
+  </div>
+</div>
+</body>
+</html>
