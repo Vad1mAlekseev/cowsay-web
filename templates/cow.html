@@ -1,39 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Cowsay web!</title>
-  </head>
-  <body>
-    <div class="navigation">
-      <a href="/<%- prevCow %>">&lt;--previous cow</a>
-      <a href="/">main page</a>
-      <a href="/<%- nextCow %>">next cow--&gt;</a>
-    </div>
-    <div class="cow">
-      <pre><%- cow %></pre>
-    </div>
-    <style>
-      body {
-        color: white;
-        background-color: black;
-        font-size: 1.5rem;
-        font-family: monospace;
-      }
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Cowsay web!</title>
+  <style>
+    body {
+      color: white;
+      background-color: black;
+      font-size: 1.5rem;
+      font-family: monospace;
+    }
 
-      .cow {
-        display: flex;
-        justify-content: center;
-      }
+    #confirmTextButton,
+    #simpleModeButton {
+      color: white;
+      background-color: black;
+      border: 2px solid white;
+      font-size: 1.5rem;
+    }
 
-      a {
-        color: white;
-      }
+    #cowText {
+      background-color: black;
+      color: white;
+    font-size: 1.5rem;
+      border: 2px solid white;
+      max-width: 15rem;
+    }
 
-      .navigation {
-        display: flex;
-        justify-content: space-between;
-      }
-    </style>
-  </body>
+    .cow {
+      display: flex;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .flex {
+      display: flex;
+    }
+
+    .justify-around {
+      justify-content: space-around;
+    }
+
+    a {
+      color: white;
+    }
+
+    a:visited {
+      color: #84ff9d;
+    }
+  </style>
+</head>
+<body>
+<div class="flex justify-around">
+  <a href="/<%- prevCow %>">&lt;-- previous cow</a>
+  <a href="/">main page</a>
+  <a href="/<%- nextCow %>">next cow --&gt;</a>
+</div>
+<div class="justify-around flex">
+  <div class="flex">
+    <input id="cowText" type="text" placeholder="Type text">
+    <button type="text" id="confirmTextButton">Confirm text</button>
+  </div>
+  <button id="simpleModeButton">Simple mode</button>
+</div>
+<div class="cow">
+  <pre><%- cow %></pre>
+</div>
+<script>
+  function setCowText(e) {
+    const searchParams = new URLSearchParams(window.location.search);
+    const textBox = document.getElementById('cowText');
+    searchParams.set('text', textBox.value);
+    window.location.search = searchParams.toString();
+  }
+
+  function goToSimpleMode(e) {
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.set('mode', 'simple');
+    window.location.search = searchParams.toString();
+  }
+
+  document.getElementById('confirmTextButton').addEventListener('click', setCowText);
+  document.getElementById('simpleModeButton').addEventListener('click', goToSimpleMode);
+</script>
+</body>
 </html>
