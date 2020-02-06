@@ -20,7 +20,7 @@ async function cowsay(flags, text) {
     if (text === 'random') {
       query = `fortune | ${query}`;
     } else {
-      query = `echo ${text} | ${query}`;
+      query = `echo ${_(text).words().join(' ')} | ${query}`;
     }
   }
   const { stdout, stderr } = await exec(query);
