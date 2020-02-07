@@ -51,7 +51,7 @@ function defineRoutes() {
         stylesheet: staticFiles.stylesheet,
       });
     } catch (err) {
-      ctx.throw(400, err);
+      ctx.throw(500, err);
     }
   });
 
