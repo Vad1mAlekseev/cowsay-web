@@ -2,26 +2,24 @@
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8"/>
-    <title>Cowsay web!</title>
-    <style>
-        <%- stylesheet %>
-    </style>
+    <title>{{ .Title }}</title>
+    <link href="/static/styles.css" rel="stylesheet">
 </head>
 <body>
 <div class="flex justify-around">
-    <a href="/<%- prevCow %>">&lt;-- previous cow</a>
+    <a href="/{{ .Prev }}">&lt;-- previous cow</a>
     <a href="/">main page</a>
-    <a href="/<%- nextCow %>">next cow --&gt;</a>
+    <a href="/{{ .Next }}">next cow --&gt;</a>
 </div>
 <div class="justify-around flex">
     <div class="flex">
-        <input id="cowText" type="text" placeholder="Type text">
-        <button type="text" id="confirmTextButton">Confirm text</button>
+        <input id="cowText" placeholder="Type text" type="text">
+        <button id="confirmTextButton">Say</button>
     </div>
-    <button id="simpleModeButton">Simple mode</button>
+    <button id="simpleModeButton">Plain text</button>
 </div>
 <div class="flex justify-around">
-    <pre><%- cow %></pre>
+    <pre>{{ .Preformatted }}</pre>
 </div>
 <script>
     function setCowText(e) {

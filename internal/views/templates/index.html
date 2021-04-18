@@ -1,15 +1,14 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
     <title>{{ .Title }}</title>
-    <link rel="stylesheet" href="/static/styles.css">
+    <link href="/static/styles.css" rel="stylesheet">
 </head>
 <body>
 <div>
     <h2>Choose the cow:</h2>
     <div class="flex wrap">
-        {{ range .Figures }}
+        {{range .Figures}}
         <a href="/{{.}}">{{.}}</a>
         {{end}}
     </div>
