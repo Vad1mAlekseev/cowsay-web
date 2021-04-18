@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8"/>
+    <title>{{ .Title }}</title>
+    <link href="/static/styles.css" rel="stylesheet">
+</head>
+<body>
+<div class="flex justify-around">
+    <a href="/{{ .Prev }}">&lt;-- previous cow</a>
+    <a href="/">main page</a>
+    <a href="/{{ .Next }}">next cow --&gt;</a>
+</div>
+<div class="justify-around flex">
+    <div class="flex">
+        <input id="cowText" placeholder="Type text" type="text">
+        <button id="confirmTextButton">Say</button>
+    </div>
+    <button id="simpleModeButton">Plain text</button>
+</div>
+<div class="flex justify-around">
+    <pre>{{ .Preformatted }}</pre>
+</div>
+<script>
+    function setCowText(e) {
+        const searchParams = new URLSearchParams(window.location.search);
+        const textBox = document.getElementById('cowText');
+        searchParams.set('text', textBox.value);
+        window.location.search = searchParams.toString();
+    }
+
+    function goToSimpleMode(e) {
+        const searchParams = new URLSearchParams(window.location.search);
+        searchParams.set('mode', 'simple');
+        window.location.search = searchParams.toString();
+    }
+
+    document.getElementById('confirmTextButton').addEventListener('click', setCowText);
+    document.getElementById('simpleModeButton').addEventListener('click', goToSimpleMode);
+</script>
+</body>
+</html>

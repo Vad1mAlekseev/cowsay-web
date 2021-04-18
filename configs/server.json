@@ -1,0 +1,5 @@
+{
+  "logLevel": "debug",
+  "bindAddr": ":8080",
+  "staticURLPrefix": "/static/"
+}
