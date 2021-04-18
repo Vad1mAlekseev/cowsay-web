@@ -6,3 +6,8 @@ build:
 .PHONY: clean
 clean:
 	rm -rf build
+
+.PHONY: before_commit
+before_commit:
+	go fmt ./...
+	go test ./...
