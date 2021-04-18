@@ -3,13 +3,14 @@ package apiserver
 import (
 	"context"
 	"fmt"
-	"github.com/gorilla/mux"
-	"github.com/sirupsen/logrus"
-	"github.com/vad1malekseev/cowsay-web/internal/cowsay"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/gorilla/mux"
+	"github.com/sirupsen/logrus"
+	"github.com/vad1malekseev/cowsay-web/internal/cowsay"
 )
 
 type Cowsay interface {
@@ -65,7 +66,7 @@ func (s *ApiServer) configureServer() {
 	r.HandleFunc("/favicon.ico", s.FaviconHandler)
 	r.HandleFunc("/{figure}", s.FigureHandler)
 
-	staticHandler := http.StripPrefix(s.config.StaticURLPrefix, http.FileServer(http.Dir(s.config.StaticFolder)))
+	staticHandler := http.StripPrefix(s.config.StaticURLPrefix, http.FileServer(http.Dir("web/static")))
 	r.PathPrefix(s.config.StaticURLPrefix).Handler(staticHandler)
 
 	timeout := time.Microsecond * time.Duration(s.config.ConnectionTimeout)

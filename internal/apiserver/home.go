@@ -1,14 +1,16 @@
 package apiserver
 
 import (
-	"github.com/vad1malekseev/cowsay-web/internal/views"
 	"net/http"
+
+	"github.com/vad1malekseev/cowsay-web/internal/views"
 )
 
 func (s *ApiServer) HomeHandler(w http.ResponseWriter, r *http.Request) {
 	figs, err := s.cowsay.List()
 	if err != nil {
 		s.logger.Errorf("error getting figures: %v", err)
+		return
 	}
 
 	HomeFiller := views.NewHome(figs)

@@ -15,5 +15,6 @@ func (s *ApiServer) FaviconHandler(w http.ResponseWriter, r *http.Request) {
 
 	if _, err := w.Write(icon); err != nil {
 		s.logger.Errorf("error while handling favicon: %v\n", err)
+		return
 	}
 }

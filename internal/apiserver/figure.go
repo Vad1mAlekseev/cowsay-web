@@ -1,9 +1,10 @@
 package apiserver
 
 import (
+	"net/http"
+
 	"github.com/gorilla/mux"
 	"github.com/vad1malekseev/cowsay-web/internal/views"
-	"net/http"
 )
 
 func (s *ApiServer) FigureHandler(w http.ResponseWriter, r *http.Request) {

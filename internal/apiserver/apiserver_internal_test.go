@@ -1,16 +1,16 @@
 package apiserver
 
 import (
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 var defaultCfg *Config = &Config{
 	BindAddr:          "test",
-	StaticFolder:      "test",
 	StaticURLPrefix:   "/test/",
 	LogLevel:          "debug",
 	ConnectionTimeout: time.Minute,
@@ -62,27 +62,27 @@ func Test_ApiServer_HandleHomePage(t *testing.T) {
 func Test_ApiServer_HandleFigurePage(t *testing.T) {
 	s := newTestServer()
 	testCases := []struct {
-		name         string
-		url          interface{}
-		expectedCode int
+		name                string
+		url                 interface{}
+		expectedCode        int
 		expectedContentType string
 	}{
 		{
-			name:         "valid",
-			url:          "/test-1",
-			expectedCode: http.StatusOK,
+			name:                "valid",
+			url:                 "/test-1",
+			expectedCode:        http.StatusOK,
 			expectedContentType: "text/html; charset=utf-8",
 		},
 		{
-			name:         "non-existent figure",
-			url:          "/press-F",
-			expectedCode: http.StatusNotFound,
+			name:                "non-existent figure",
+			url:                 "/press-F",
+			expectedCode:        http.StatusNotFound,
 			expectedContentType: "",
 		},
 		{
-			name:         "simple mode",
-			url:          "/test-1?mode=simple",
-			expectedCode: http.StatusOK,
+			name:                "simple mode",
+			url:                 "/test-1?mode=simple",
+			expectedCode:        http.StatusOK,
 			expectedContentType: "text/plain; charset=utf-8",
 		},
 	}
