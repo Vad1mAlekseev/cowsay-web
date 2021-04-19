@@ -2,6 +2,7 @@
 build:
 	go build -o build/ ./...
 	cp web build -r
+	mkdir build/configs && cp configs/* build/configs/
 
 .PHONY: clean
 clean:
