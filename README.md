@@ -10,7 +10,7 @@ Based on the [cowsay-cli program](https://en.wikipedia.org/wiki/Cowsay).
 
 ## CLI usage
 
-```bash
+```
 $ curl "cowsay-web.xyz/eyes?mode=simple"
 
 _________________________________________
