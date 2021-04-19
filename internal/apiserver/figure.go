@@ -12,7 +12,7 @@ func (s *ApiServer) FigureHandler(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query()
 	cow := vars["figure"]
 
-	isSimpleMode := query.Get("mode") == "simple"
+	isPlainMode := query.Get("mode") == "plain"
 
 	text := query.Get("text")
 	if text == "" {
@@ -47,7 +47,7 @@ func (s *ApiServer) FigureHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if isSimpleMode {
+	if isPlainMode {
 		w.Header().Set("content-type", "text/plain; charset=utf-8")
 		_, _ = w.Write(preformatted)
 		return

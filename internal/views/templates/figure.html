@@ -19,7 +19,7 @@
             <button id="fortuneButton">fortune</button>
         </form>
     </div>
-    <button id="simpleModeButton">plain</button>
+    <button id="plainModeButton">plain</button>
 </div>
 <div class="flex justify-around">
     <pre>{{ .Preformatted }}</pre>
@@ -38,8 +38,8 @@
         setParam('text', text);
     });
 
-    document.getElementById('simpleModeButton').addEventListener('click', () => {
-        setParam('mode', 'simple');
+    document.getElementById('plainModeButton').addEventListener('click', () => {
+        setParam('mode', 'plain');
     });
 
     document.getElementById('fortuneButton').addEventListener('click', (e) => {

@@ -80,8 +80,8 @@ func Test_ApiServer_HandleFigurePage(t *testing.T) {
 			expectedContentType: "",
 		},
 		{
-			name:                "simple mode",
-			url:                 "/test-1?mode=simple",
+			name:                "plain mode",
+			url:                 "/test-1?mode=plain",
 			expectedCode:        http.StatusOK,
 			expectedContentType: "text/plain; charset=utf-8",
 		},
