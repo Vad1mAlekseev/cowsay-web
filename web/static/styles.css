@@ -30,7 +30,8 @@ a:visited {
 }
 
 #confirmTextButton,
-#simpleModeButton {
+#simpleModeButton,
+#fortuneButton {
     color: white;
     background-color: black;
     border: 2px solid white;
@@ -51,4 +52,8 @@ a:visited {
 
 .justify-around {
     justify-content: space-around;
+}
+
+.padding-1 {
+    padding: 10px;
 }

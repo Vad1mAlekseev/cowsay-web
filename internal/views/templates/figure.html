@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
 <head>
     <meta charset="UTF-8"/>
     <title>{{ .Title }}</title>
@@ -7,36 +7,45 @@
 </head>
 <body>
 <div class="flex justify-around">
-    <a href="/{{ .Prev }}">&lt;-- previous cow</a>
+    <a href="/{{ .Prev }}">&lt;-- previous</a>
     <a href="/">main page</a>
-    <a href="/{{ .Next }}">next cow --&gt;</a>
+    <a href="/{{ .Next }}">next --&gt;</a>
 </div>
-<div class="justify-around flex">
+<div class="justify-around flex padding-1">
     <div class="flex">
-        <input id="cowText" placeholder="Type text" type="text">
-        <button id="confirmTextButton">Say</button>
+        <form id="textForm">
+            <input id="cowText" placeholder="Type text" type="text">
+            <input id="confirmTextButton" type="submit" value="say">
+            <button id="fortuneButton">fortune</button>
+        </form>
     </div>
-    <button id="simpleModeButton">Plain text</button>
+    <button id="simpleModeButton">plain</button>
 </div>
 <div class="flex justify-around">
     <pre>{{ .Preformatted }}</pre>
 </div>
 <script>
-    function setCowText(e) {
-        const searchParams = new URLSearchParams(window.location.search);
-        const textBox = document.getElementById('cowText');
-        searchParams.set('text', textBox.value);
-        window.location.search = searchParams.toString();
+    function setParam(name, value) {
+        const params = new URLSearchParams(window.location.search);
+        params.set(name, value);
+        location.search = params.toString();
     }
 
-    function goToSimpleMode(e) {
-        const searchParams = new URLSearchParams(window.location.search);
-        searchParams.set('mode', 'simple');
-        window.location.search = searchParams.toString();
-    }
+    document.getElementById('textForm').addEventListener('submit', (e) => {
+        e.preventDefault();
 
-    document.getElementById('confirmTextButton').addEventListener('click', setCowText);
-    document.getElementById('simpleModeButton').addEventListener('click', goToSimpleMode);
+        const text = document.getElementById('cowText').value;
+        setParam('text', text);
+    });
+
+    document.getElementById('simpleModeButton').addEventListener('click', () => {
+        setParam('mode', 'simple');
+    });
+
+    document.getElementById('fortuneButton').addEventListener('click', (e) => {
+        e.preventDefault();
+        setParam('text', 'random');
+    });
 </script>
 </body>
 </html>
