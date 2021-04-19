@@ -11,7 +11,7 @@ Based on the [cowsay-cli program](https://en.wikipedia.org/wiki/Cowsay).
 ## CLI usage
 
 ```
-$ curl "cowsay-web.xyz/eyes?mode=simple"
+$ curl "cowsay-web.xyz/eyes?mode=plain"
 
 _________________________________________
 / You will pay for your sins. If you have \
