@@ -7,11 +7,11 @@
 </head>
 <body>
 <div>
-    <h2>Choose the cow:</h2>
+    <h2>Choose a figure:</h2>
     <div class="flex wrap">
-        {{range .Figures}}
-        <a href="/{{.}}">{{.}}</a>
-        {{end}}
+        {{ range .Figures }}
+        <a href="/{{.}}">{{ . }}</a>
+        {{ end }}
     </div>
     <div class="author">
         <a href="https://github.com/vad1malekseev/cowsay-web">

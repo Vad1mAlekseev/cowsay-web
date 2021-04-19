@@ -14,7 +14,7 @@
 <div class="justify-around flex padding-1">
     <div class="flex">
         <form id="textForm">
-            <input id="cowText" placeholder="Type text" type="text">
+            <input id="figureText" placeholder="Type text" type="text">
             <input id="confirmTextButton" type="submit" value="say">
             <button id="fortuneButton">fortune</button>
         </form>
@@ -34,7 +34,7 @@
     document.getElementById('textForm').addEventListener('submit', (e) => {
         e.preventDefault();
 
-        const text = document.getElementById('cowText').value;
+        const text = document.getElementById('figureText').value;
         setParam('text', text);
     });
 
