@@ -48,7 +48,7 @@ func (s *Cowsay) Make(figName string, text string) ([]byte, error) {
 func allFigures() ([]string, error) {
 	figure, err := exec.Command("cowsay", "-l").Output()
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("error while check available figures: %v\n", err))
+		return nil, fmt.Errorf("error while check available figures: %v\n", err)
 	}
 
 	output := string(figure)
