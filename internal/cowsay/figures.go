@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+var errorRequestingFigs = errors.New("error requesting figures")
+
 type Cowsay struct {
 	listCache []string
 }
@@ -30,8 +32,9 @@ func (s *Cowsay) Make(figName string, text string) ([]byte, error) {
 
 		fort, err := fortCmd.Output()
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("error running fortune: %w", err)
 		}
+
 		text = string(fort)
 	}
 
@@ -39,7 +42,7 @@ func (s *Cowsay) Make(figName string, text string) ([]byte, error) {
 
 	figure, err := cmd.Output()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error creating the figure %s: %v", figName, err)
 	}
 
 	return figure, nil
@@ -48,7 +51,7 @@ func (s *Cowsay) Make(figName string, text string) ([]byte, error) {
 func allFigures() ([]string, error) {
 	figure, err := exec.Command("cowsay", "-l").Output()
 	if err != nil {
-		return nil, fmt.Errorf("error while check available figures: %v\n", err)
+		return nil, fmt.Errorf("error while check available figures: %w", err)
 	}
 
 	output := string(figure)
@@ -57,8 +60,9 @@ func allFigures() ([]string, error) {
 	lines = lines[1:]
 	output = strings.Join(lines, " ")
 	figures := strings.Fields(output)
-	if len(figures) <= 0 {
-		return nil, errors.New("error requesting figures")
+
+	if len(figures) == 0 {
+		return nil, errorRequestingFigs
 	}
 
 	return figures, nil

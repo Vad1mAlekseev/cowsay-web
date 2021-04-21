@@ -7,7 +7,7 @@ import (
 	"github.com/vad1malekseev/cowsay-web/internal/views"
 )
 
-func (s *ApiServer) FigureHandler(w http.ResponseWriter, r *http.Request) {
+func (s *APIServer) FigureHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	query := r.URL.Query()
 	cow := vars["figure"]
@@ -23,33 +23,39 @@ func (s *ApiServer) FigureHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		s.logger.Errorf("error getting figure: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
+
 		return
 	}
 
 	exists := false
 	pos := 0
+
 	for idx, fig := range figs {
 		if fig == cow {
 			exists = true
 			pos = idx
+
 			break
 		}
 	}
 
 	if !exists {
 		w.WriteHeader(http.StatusNotFound)
+
 		return
 	}
 
 	preformatted, err := s.cowsay.Make(cow, text)
 	if err != nil {
 		s.logger.Errorf("error creating figure: %v", err)
+
 		return
 	}
 
 	if isPlainMode {
 		w.Header().Set("content-type", "text/plain; charset=utf-8")
 		_, _ = w.Write(preformatted)
+
 		return
 	}
 
@@ -57,6 +63,7 @@ func (s *ApiServer) FigureHandler(w http.ResponseWriter, r *http.Request) {
 	if nextIdx >= len(figs) {
 		nextIdx = 0
 	}
+
 	prevIdx := pos - 1
 	if prevIdx < 0 {
 		prevIdx = len(figs) - 1
@@ -69,6 +76,7 @@ func (s *ApiServer) FigureHandler(w http.ResponseWriter, r *http.Request) {
 	if err := figView.HTML(w); err != nil {
 		s.logger.Errorln("error parsing HTML-template with figure:", cow)
 		w.WriteHeader(http.StatusInternalServerError)
+
 		return
 	}
 }

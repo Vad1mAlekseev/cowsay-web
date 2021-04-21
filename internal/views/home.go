@@ -2,6 +2,7 @@ package views
 
 import (
 	_ "embed"
+	"fmt"
 	"html/template"
 	"io"
 )
@@ -17,11 +18,11 @@ type IndexView struct {
 func (v *IndexView) HTML(dst io.Writer) error {
 	indexTempl, err := template.New("index").Parse(indexTemplate)
 	if err != nil {
-		return err
+		return fmt.Errorf("error parsing home HTML template: %w", err)
 	}
 
 	if err := indexTempl.Execute(dst, v); err != nil {
-		return err
+		return fmt.Errorf("error executing home HTML template: %w", err)
 	}
 
 	return nil

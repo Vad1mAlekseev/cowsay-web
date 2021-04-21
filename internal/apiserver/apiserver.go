@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/sirupsen/logrus"
 	"github.com/vad1malekseev/cowsay-web/internal/cowsay"
 )
@@ -18,7 +18,7 @@ type Cowsay interface {
 	Make(string, string) ([]byte, error)
 }
 
-type ApiServer struct {
+type APIServer struct {
 	server *http.Server
 	config *Config
 	logger *logrus.Logger
@@ -26,13 +26,18 @@ type ApiServer struct {
 	cowsay Cowsay
 }
 
-func New(cfg *Config) *ApiServer {
-	return &ApiServer{config: cfg, logger: logrus.New()}
+func New(cfg *Config) *APIServer {
+	return &APIServer{
+		server: nil,
+		config: cfg,
+		logger: logrus.New(),
+		cowsay: nil,
+	}
 }
 
-func (s *ApiServer) Run() error {
+func (s *APIServer) Run() error {
 	if err := s.configureLogger(); err != nil {
-		return fmt.Errorf("error configuring the logger: %v", err)
+		return fmt.Errorf("error configuring the logger: %w", err)
 	}
 
 	s.configureServer()
@@ -48,48 +53,52 @@ func (s *ApiServer) Run() error {
 	return nil
 }
 
-func (s *ApiServer) WaitWithGracefulShutdown() {
+func (s *APIServer) WaitWithGracefulShutdown() {
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt)
 	<-done
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(s.config.ConnectionTimeout))
-	defer cancel()
+	ctx, cancel := context.WithTimeout(context.Background(), s.config.ConnectionTimeout)
 	_ = s.server.Shutdown(ctx)
+
 	s.logger.Infoln("Shutting down...")
+	cancel()
 	os.Exit(0)
 }
 
-func (s *ApiServer) configureServer() {
+func (s *APIServer) configureServer() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", s.HomeHandler)
+	r.Handle("/metrics", promhttp.Handler())
 	r.HandleFunc("/favicon.ico", s.FaviconHandler)
 	r.HandleFunc("/{figure}", s.FigureHandler)
 
 	staticHandler := http.StripPrefix(s.config.StaticURLPrefix, http.FileServer(http.Dir("web/static")))
 	r.PathPrefix(s.config.StaticURLPrefix).Handler(staticHandler)
 
-	timeout := time.Microsecond * time.Duration(s.config.ConnectionTimeout)
+	timeout := s.config.ConnectionTimeout
 	s.server = &http.Server{
-		Addr: s.config.BindAddr,
+		Addr:        s.config.BindAddr,
+		Handler:     r,
+		TLSConfig:   nil,
+		ReadTimeout: timeout,
 		// Avoid Slowloris attacks.
 		WriteTimeout: timeout,
-		ReadTimeout:  timeout,
 		IdleTimeout:  timeout,
-		Handler:      r,
 	}
 }
 
-func (s *ApiServer) configureLogger() error {
+func (s *APIServer) configureLogger() error {
 	lvl, err := logrus.ParseLevel(s.config.LogLevel)
 	if err != nil {
-		return err
+		return fmt.Errorf("error parsing log level: %w", err)
 	}
 
 	s.logger.SetLevel(lvl)
+
 	return nil
 }
 
-func (s *ApiServer) configureCowsay() {
+func (s *APIServer) configureCowsay() {
 	s.cowsay = &cowsay.Cowsay{}
 }

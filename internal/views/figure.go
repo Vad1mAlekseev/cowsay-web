@@ -2,6 +2,7 @@ package views
 
 import (
 	_ "embed"
+	"fmt"
 	"html/template"
 	"io"
 )
@@ -19,11 +20,11 @@ type FigureView struct {
 func (v *FigureView) HTML(dst io.Writer) error {
 	indexTempl, err := template.New("figure").Parse(figureTemplate)
 	if err != nil {
-		return err
+		return fmt.Errorf("error parsing figure HTML template: %w", err)
 	}
 
 	if err := indexTempl.Execute(dst, v); err != nil {
-		return err
+		return fmt.Errorf("error executing figure HTML template: %w", err)
 	}
 
 	return nil

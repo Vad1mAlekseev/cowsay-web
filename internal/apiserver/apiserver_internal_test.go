@@ -1,6 +1,7 @@
 package apiserver
 
 import (
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -9,15 +10,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var defaultCfg *Config = &Config{
-	BindAddr:          "test",
-	StaticURLPrefix:   "/test/",
-	LogLevel:          "debug",
-	ConnectionTimeout: time.Minute,
+func getTestCfg() *Config {
+	return &Config{
+		BindAddr:          "test",
+		StaticURLPrefix:   "/test/",
+		LogLevel:          "debug",
+		ConnectionTimeout: time.Minute,
+	}
 }
 
-type fakeCowsay struct {
-}
+type fakeCowsay struct{}
 
 func (fakeCowsay) List() ([]string, error) {
 	return []string{"test-1", "test-2", "test-3"}, nil
@@ -27,8 +29,8 @@ func (fakeCowsay) Make(string, string) ([]byte, error) {
 	return []byte("test\nfigure\n"), nil
 }
 
-func newTestServer() *ApiServer {
-	s := New(defaultCfg)
+func newTestServer() *APIServer {
+	s := New(getTestCfg())
 
 	s.configureServer()
 	s.cowsay = &fakeCowsay{}
@@ -36,8 +38,11 @@ func newTestServer() *ApiServer {
 	return s
 }
 
-func Test_ApiServer_HandleHomePage(t *testing.T) {
+func Test_APIServer_HandleHomePage(t *testing.T) {
+	t.Parallel()
+
 	s := newTestServer()
+
 	testCases := []struct {
 		name         string
 		payload      interface{}
@@ -49,18 +54,25 @@ func Test_ApiServer_HandleHomePage(t *testing.T) {
 		},
 	}
 
-	for _, tc := range testCases {
+	ctx := context.Background()
+
+	for _, testCase := range testCases {
+		tc := testCase
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			res := httptest.NewRecorder()
-			req, _ := http.NewRequest(http.MethodGet, "/", nil)
+			req, _ := http.NewRequestWithContext(ctx, http.MethodGet, "/", nil)
 			s.HomeHandler(res, req)
 			assert.Equal(t, tc.expectedCode, res.Code)
 		})
 	}
 }
 
-func Test_ApiServer_HandleFigurePage(t *testing.T) {
+func Test_APIServer_HandleFigurePage(t *testing.T) {
+	t.Parallel()
+
 	s := newTestServer()
+
 	testCases := []struct {
 		name                string
 		url                 interface{}
@@ -87,10 +99,14 @@ func Test_ApiServer_HandleFigurePage(t *testing.T) {
 		},
 	}
 
-	for _, tc := range testCases {
+	ctx := context.Background()
+
+	for _, testCase := range testCases {
+		tc := testCase
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			res := httptest.NewRecorder()
-			req, _ := http.NewRequest(http.MethodGet, tc.url.(string), nil)
+			req, _ := http.NewRequestWithContext(ctx, http.MethodGet, tc.url.(string), nil)
 			s.server.Handler.ServeHTTP(res, req)
 			s.FigureHandler(res, req)
 			assert.Equal(t, tc.expectedCode, res.Code)
