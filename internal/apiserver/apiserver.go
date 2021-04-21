@@ -30,19 +30,23 @@ type Cowsay interface {
 
 // The APIServer struct for serving cowsay-web.
 type APIServer struct {
-	server  *http.Server
-	config  *Config
-	logger  *logrus.Logger
-	metrics *Metrics
+	server        *http.Server
+	config        *Config
+	logger        *logrus.Logger
+	metrics       *Metrics
+	prometheusCtx *prometheus.Registry
 
 	cowsay Cowsay
 }
 
 // New creates a APIServer instance providing config.
 func New(cfg *Config) *APIServer {
+	registry := prometheus.NewRegistry()
+
 	return &APIServer{
-		config: cfg,
-		logger: logrus.New(),
+		config:        cfg,
+		logger:        logrus.New(),
+		prometheusCtx: registry,
 		metrics: &Metrics{
 			totalRequests: prometheus.NewCounterVec(
 				prometheus.CounterOpts{
@@ -57,7 +61,7 @@ func New(cfg *Config) *APIServer {
 				},
 				[]string{"status"},
 			),
-			httpDuration: promauto.NewHistogramVec(prometheus.HistogramOpts{
+			httpDuration: promauto.With(registry).NewHistogramVec(prometheus.HistogramOpts{
 				Name: "http_response_time_seconds",
 				Help: "Duration of HTTP requests.",
 			}, []string{"path"}),
