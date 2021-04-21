@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+// FaviconHandler is providing the cowsay-web icon.
 func (s *APIServer) FaviconHandler(w http.ResponseWriter, _ *http.Request) {
 	icon, err := ioutil.ReadFile("web/static/img.png")
 	if err != nil {

@@ -2,6 +2,7 @@ package apiserver
 
 import "time"
 
+// The Config of APIServer.
 type Config struct {
 	BindAddr          string
 	StaticURLPrefix   string
@@ -9,6 +10,7 @@ type Config struct {
 	ConnectionTimeout time.Duration `json:"connectionTimeoutNs,string,omitempty"`
 }
 
+// NewConfig get default config.
 func NewConfig() *Config {
 	return &Config{
 		":8080",

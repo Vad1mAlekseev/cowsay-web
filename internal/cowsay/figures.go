@@ -13,6 +13,7 @@ type Cowsay struct {
 	listCache []string
 }
 
+// List returns supported figures.
 func (s *Cowsay) List() ([]string, error) {
 	if s.listCache == nil {
 		figures, err := allFigures()
@@ -26,6 +27,7 @@ func (s *Cowsay) List() ([]string, error) {
 	return s.listCache, nil
 }
 
+// Make a new figure by name.
 func (s *Cowsay) Make(figName string, text string) ([]byte, error) {
 	if text == "random" {
 		fortCmd := exec.Command("fortune")
@@ -42,7 +44,7 @@ func (s *Cowsay) Make(figName string, text string) ([]byte, error) {
 
 	figure, err := cmd.Output()
 	if err != nil {
-		return nil, fmt.Errorf("error creating the figure %s: %v", figName, err)
+		return nil, fmt.Errorf("error creating the figure %s: %w", figName, err)
 	}
 
 	return figure, nil

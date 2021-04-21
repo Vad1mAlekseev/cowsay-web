@@ -6,6 +6,7 @@ import (
 	"github.com/vad1malekseev/cowsay-web/internal/views"
 )
 
+// HomeHandler is providing list of available figures.
 func (s *APIServer) HomeHandler(w http.ResponseWriter, r *http.Request) {
 	figs, err := s.cowsay.List()
 	if err != nil {

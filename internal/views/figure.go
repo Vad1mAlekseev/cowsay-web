@@ -8,7 +8,7 @@ import (
 )
 
 //go:embed templates/figure.html
-var figureTemplate string
+var figureTemplate string //nolint:gochecknoglobals
 
 type FigureView struct {
 	Title        string
@@ -17,6 +17,7 @@ type FigureView struct {
 	Next, Prev   string
 }
 
+// HTML wraps the figure to html.
 func (v *FigureView) HTML(dst io.Writer) error {
 	indexTempl, err := template.New("figure").Parse(figureTemplate)
 	if err != nil {
@@ -30,6 +31,7 @@ func (v *FigureView) HTML(dst io.Writer) error {
 	return nil
 }
 
+// NewFigure creates new figure view by name.
 func NewFigure(figure, next, prev, preformatted string) *FigureView {
 	return &FigureView{
 		"Cowsay Web! | " + figure,

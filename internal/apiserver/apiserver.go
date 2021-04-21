@@ -13,11 +13,13 @@ import (
 	"github.com/vad1malekseev/cowsay-web/internal/cowsay"
 )
 
+// The Cowsay CLI methods.
 type Cowsay interface {
 	List() ([]string, error)
 	Make(string, string) ([]byte, error)
 }
 
+// The APIServer struct for serving cowsay-web.
 type APIServer struct {
 	server *http.Server
 	config *Config
@@ -26,6 +28,7 @@ type APIServer struct {
 	cowsay Cowsay
 }
 
+// New creates a APIServer instance providing config.
 func New(cfg *Config) *APIServer {
 	return &APIServer{
 		server: nil,
@@ -35,6 +38,7 @@ func New(cfg *Config) *APIServer {
 	}
 }
 
+// Run the server.
 func (s *APIServer) Run() error {
 	if err := s.configureLogger(); err != nil {
 		return fmt.Errorf("error configuring the logger: %w", err)
@@ -53,7 +57,8 @@ func (s *APIServer) Run() error {
 	return nil
 }
 
-func (s *APIServer) WaitWithGracefulShutdown() {
+// WaitWithShutdown checks for system interrupts and safe shutdown of the server if this happens.
+func (s *APIServer) WaitWithShutdown() {
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt)
 	<-done
