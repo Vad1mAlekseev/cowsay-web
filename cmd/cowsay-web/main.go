@@ -28,7 +28,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	s.WaitWithGracefulShutdown()
+	s.WaitWithShutdown()
 }
 
 func getConfig(configPath string) (*apiserver.Config, error) {
