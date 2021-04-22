@@ -8,6 +8,16 @@ Based on the [cowsay-cli program](https://en.wikipedia.org/wiki/Cowsay).
 - Implementation of all original figures
 - Displays a random message using [fortune](https://en.wikipedia.org/wiki/Fortune_(Unix))
 
+## Run
+
+To run this project locally, you need Docker:
+
+```bash
+docker-compose up
+```
+
+Then visit localhost:8080 to see cowsay-web. If you need to see grafana, visit localhost:3000.
+
 ## CLI usage
 
 ```
