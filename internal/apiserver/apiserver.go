@@ -78,7 +78,7 @@ func (s *APIServer) Run() error {
 	s.configureCowsay()
 
 	go func() {
-		if err := s.server.ListenAndServe(); err != nil {
+		if err := s.server.ListenAndServeTLS(s.config.certPath, s.config.keyPath); err != nil {
 			s.logger.Fatalf("error trying to ListenAndServe: %v", err)
 		}
 	}()
