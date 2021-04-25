@@ -2,6 +2,7 @@ package apiserver
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"net/http"
 	"os"
@@ -13,6 +14,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/sirupsen/logrus"
 	"github.com/vad1malekseev/cowsay-web/internal/cowsay"
+	"golang.org/x/crypto/acme/autocert"
 )
 
 type Metrics struct {
@@ -77,12 +79,27 @@ func (s *APIServer) Run() error {
 	s.configureServer()
 	s.configureCowsay()
 
+	certManager := autocert.Manager{
+		Prompt:     autocert.AcceptTOS,
+		Cache:      autocert.DirCache("cert-cache"),
+		HostPolicy: autocert.HostWhitelist("cowsay-web.xyz"),
+	}
+
+	s.server.TLSConfig = &tls.Config{
+		MinVersion: 1,
+		GetCertificate: certManager.GetCertificate,
+	}
+
 	go func() {
-		if err := s.server.ListenAndServeTLS(s.config.certPath, s.config.keyPath); err != nil {
+		if err := s.server.ListenAndServeTLS("", ""); err != nil {
 			s.logger.Fatalf("error trying to ListenAndServe: %v", err)
 		}
 	}()
 	s.logger.Infoln("Server started listening on", s.config.BindAddr)
+
+	go func() {
+		_ = http.ListenAndServe(":80", certManager.HTTPHandler(nil))
+	}()
 
 	return nil
 }
