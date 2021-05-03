@@ -7,7 +7,7 @@ import (
 	"io"
 )
 
-//go:embed templates/figure.html
+//go:embed templates/figure.gohtml
 var figureTemplate string //nolint:gochecknoglobals
 
 type FigureView struct {

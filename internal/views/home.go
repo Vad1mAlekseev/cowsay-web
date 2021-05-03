@@ -7,7 +7,7 @@ import (
 	"io"
 )
 
-//go:embed templates/index.html
+//go:embed templates/index.gohtml
 var indexTemplate string //nolint:gochecknoglobals
 
 type IndexView struct {
